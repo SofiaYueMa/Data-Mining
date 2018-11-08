@@ -1,0 +1,187 @@
+---
+title: "Assignment 2"
+author: "Yue Ma"
+date: "2018/10/6"
+output:
+  pdf_document: default
+  html_document:
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Matrix Algebra
+
+```{r}
+library(dplyr)
+A = matrix(c(5, 6, 1, 2, 2, 3), nrow = 2, ncol = 3)
+B = matrix(c(3, -2, 4, -3, 5, 6), nrow = 2, ncol = 3)
+C = matrix(c(1, -5, -3, 2, 3, 1), nrow = 3, ncol = 2)
+D = matrix(c(2, 4, 1, 3), nrow = 2, ncol = 2)
+```
+
+a) A + C
+Error, A and C can not make the additive operation because they do not have the same number of rows and columns.
+```{r, error = TRUE}
+A + C
+```
+
+
+b) A - B
+```{r}
+A - B
+```
+
+c) A + 5B
+```{r}
+A + 5 * B
+```
+
+d) 3A
+```{r}
+3 * A
+```
+
+e) 2B - 5A
+```{r}
+2 * B - 5 * A
+```
+
+f) B^T - C
+```{r}
+t(B) - C
+```
+
+g) BA
+
+Note: B %*% A does not work, 
+so I put B*A here.
+```{r, error = TRUE}
+B %*% A
+B * A
+```
+
+h) DA
+```{r}
+D %*% A
+```
+
+i) AD
+Note: Error here, because the number of column in A is not equal to the number of row in D
+```{r, error = TRUE}
+A %*% D
+A * D 
+```
+
+j) CD
+```{r}
+C %*% D
+```
+
+k) BC
+```{r}
+B %*% C
+```
+
+l) CB
+```{r}
+C %*% B
+```
+
+# 2. Inverses of Matrices
+
+It is true and W^(-1) exists. The reason is as below:
+$$(W^{-1}-W^{-1}xy^{\top}W^{-1})/(1+y^{\top}W^{-1}x))(W+xy^{\top})$$
+$$=E+W^{-1}xy^{\top}-W^{-1}xy^{\top}(E+W^{-1}xy^{\top})/(1+y^{\top}W^{-1}x)$$
+$$=E+(W^{-1}xy^{\top}+W^{-1}xy^{\top}y^{\top}W^{-1}x-W^{-1}xy^{\top}(E+W^{-1}xy^{\top}))/(1+y^{\top}W^{-1}x)$$
+$$=E+(W^{-1}xy^{\top}(E+y^{\top}W^{-1}x)-W^{-1}xy^{\top}(E+W^{-1}xy^{\top}))/(1+y^{\top}W^{-1}x)$$
+$$=E$$
+# 3. Stratifying
+
+
+```{r}
+cdc <- read.csv("https://www.openintro.org/stat/data/cdc.csv")
+library(dplyr)
+weight_subgroup <- cdc %>%
+  group_by(gender, hlthplan) %>%
+   summarize(df_mean = mean(weight - wtdesire, na.rm = TRUE),
+             df_median = median(weight - wtdesire, na.rm = TRUE)) 
+weight_subgroup
+```
+
+From the results, we can draw 2 conclusions. 
+The first one is that for male, those with some form of health coverage has larger difference between desire weight and actual weight in average. The median is one measure of the "center" of a distribution of data. The median of difference is also larger for those with health coverage. 
+The second one is the opposite. For female, those without some form of health coverage has larger difference between desire weight and actual weight in average. The median of difference is also larger for those without health coverage.
+As a result, the health coverage has different incfluence on the weight and desire weight for different genders.
+
+
+# 4. Apartment Prices
+
+```{r}
+apts <- readRDS(url('https://courseworks.columbia.edu/x/pJdP39'))
+library(ggplot2)
+apts$age = as.numeric(as.character(apts$age))
+apts$rooms = as.numeric(as.character(apts$rooms))
+gg <- ggplot(apts)
+gg <- gg + geom_point(mapping = aes(x = area, y = totalprice, 
+                                    color = rooms, 
+                                    size = age)) +
+  ggtitle("Apartment prices scatterplot") +
+  ylab("Building total price") +
+  xlab("Area")
+gg <- gg + theme(legend.position = "top") 
+gg
+```
+
+In the scatterplot, there is a positive correlation between the building area and the building total price. I vary the color and size of the points to illustrate the relationsip between the totalprice and rooms and age. Also, there is a positive correlation between the building rooms and the buidling total price. However, there is a negative correlation between the building ages and the building totalprice.
+
+
+
+# 5. Making plots
+
+```{r}
+library(ggplot2)
+help("iris")
+gg1 <- ggplot(iris)
+gg1 <- gg1 + geom_boxplot(mapping = aes(x = Species, 
+                                        y = Petal.Length)) +
+  ggtitle("Box-and-whiskers plot")
+gg1
+```
+
+From the box-and-whiskers plot, we can draw the following conclusions:
+1. The thick line within the box is the median, and the median is the center of the data. For the three species, the petal length of Virginica is the largest and that of Setosa is the shortest.
+2. The box indicates the 25th percentile and the 75th percentile. The range of the petal length of Viginica is the largest and that of Setosa is the smallest.
+3. Points are drawn outside the whiskers, which are in some sense "outliers". There is no "outliers" of Virginica.
+
+# 6. Histograms
+
+```{r}
+library(MASS)
+library(ggplot2)  
+gg2 <- ggplot(Cars93)
+gg_min_price <- gg2 + geom_histogram(mapping = aes(Min.Price)) +
+  ggtitle("Min Price Histogram")
+gg_max_price <- gg2 + geom_histogram(mapping = aes(Max.Price)) +
+  ggtitle("Max Price Histogram")
+gg_weight <- gg2 + geom_histogram(mapping = aes(Weight)) +
+  ggtitle("Weight Histogram")
+gg_length <- gg2 + geom_histogram(mapping = aes(Length)) +
+  ggtitle("Length Histogram")
+gg_min_price
+gg_max_price
+gg_weight
+gg_length
+gg_price <- gg2 + geom_histogram(mapping = aes(Price)) +
+  facet_wrap(~DriveTrain, nrow = 2) +
+  ggtitle("Price Histogram of Drive train type")
+gg_price
+```
+
+From the Min Price Histogram, we can see that most minimum price of the cars is below $35,000.
+From the Max Price Histogram, we can see that most maximum price of the cars is below $45,000.
+From the Weight Histogram, we can see that most weight of the cars is between 2250 and 4000 pounds.
+From the Length Histogram, we can see that most length of cars is between 160 and 210 inches.
+From the Price Histogram of Drive train type, we can see that the midrange price of 4WD and Front wheel is almost all less than 40,000 dollars, and most midrange price of Rear wheel is less than 40,000 dollars. As a result, for Front wheel, the price range is small, and the its minimum price and maximum price are more close compared to other two types of wheels.
