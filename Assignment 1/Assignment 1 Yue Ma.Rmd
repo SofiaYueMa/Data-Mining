@@ -1,0 +1,125 @@
+---
+title: "Assignment 1"
+author: "Yue Ma"
+date: "2018/9/24"
+output:
+  html_document:
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data Structure
+
+A vector is a list of elements having the same type. It is the fundamental data structure in R. The elements of a vector must all have the same mode or data type. We can have a vector consisting of three character strings (of mode character) or four integer elements (of mode integer), but not a vector with a mix of integer elements and character string elements.
+
+A data frame is a matrix-like data structure in R, with two-dimensional rows and columns where each column may have a different mode or data type. For instance, one column may consist of numbers, and another column might have character strings.
+
+## Vector
+
+```{r}
+a <- c(5,6,7,8)
+d <- c("orange","red","blue")
+print(a)
+print(d)
+```
+
+## Data.frame
+
+```{r}
+name <- c('Alice','Bob','Jack','Jessica','Maria','Derek')
+age  <- c(24,36,24,27,24,31)
+sex  <- c('F','M','M','F','F','M')
+weight <- c(110,120,130,120,140,110)
+people <- data.frame(name, age, sex,weight)
+people[,c('name','age','sex','weight')]
+```
+
+# Style
+
+```{r}
+a <- c(5,-2,3,-4,1,NA)
+b <- (-a)*(-1)
+b[b>0]
+
+num=1
+mycondition <- round(runif(1,0,1))
+if( mycondition ) {
+  num <- num + 1
+  print(paste("num =",num,sep=""))
+} else{
+  print("false")
+}
+
+# make an integer sequence from 1 to 50
+y <- 1:50
+
+# test if an number is even
+even <- y%%2 == 0
+
+# subset by the test above
+y = y[even]
+
+x <- matrix(c(23,34,35,6,87,39,21,13,99), nrow=3)
+df <- as.data.frame(x)
+names(df) <- c("percentage_score_on_reading_test",
+               "percentage.score.on.math.test",
+               "percentage-score-on-writing-test")
+
+my_mean <- function(x)
+{
+  sum(x)/length(x)
+}
+```
+
+# Subsetting a `data.frame`
+
+```{r}
+state.x77[c('Connecticut'),c('Population','Life Exp')]
+state.x77[7,c(1,4)]
+state.x77['Connecticut',c(1,4)]
+```
+
+# Manipulating Data
+
+(Note: The code can run successfully and the missing data can be replaced by the average of the non-missing data, however, there is an error that I cannot overcome when I knit it to HTML.)
+
+```{r}
+airquality$Solar.R[is.na(airquality$Solar.R)] <- mean(airquality$Solar.R, na.rm = TRUE)
+print(airquality)
+```
+
+# American National Election Study
+
+```{r}
+data("turnout", package = "qss")
+help("turnout", package = "qss")
+print(turnout)
+```
+
+## VAP-based Turnout 
+
+```{r}
+VAPtr <- turnout$total/(turnout$VAP + turnout$overseas) * 100
+names(VAPtr) <- turnout$year
+VAPtr
+```
+
+## VEP-based Turnout
+
+```{r}
+VEPtr <- turnout$total/turnout$VEP * 100 
+names(VEPtr) <- turnout$year
+VEPtr
+```
+
+## Difference between VEP and VAP-based turnout rates
+
+```{r}
+diff <- VEPtr - VAPtr
+names(diff) <- turnout$year
+diff
+```
+
