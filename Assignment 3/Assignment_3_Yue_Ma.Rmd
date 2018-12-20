@@ -1,0 +1,91 @@
+---
+title: "Assignment_3_Yue_Ma"
+author: "Yue Ma"
+date: "11/14/2018"
+output:
+  html_document:
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Prediction with Linear Models - crime dataset.
+```{r}
+ROOT <- "https://archive.ics.uci.edu/ml/machine-learning-databases/"
+crime <- read.csv(paste0(ROOT, "communities/communities.data"),
+header = FALSE, na.strings = "?")
+crime <- na.omit(crime)
+colnames(crime) <- read.table(paste0(ROOT, "communities/communities.names"),
+skip = 75, nrows = ncol(crime))[,2]
+```
+
+## Split the dataset into training and testing.
+```{r}
+library(caret)
+set.seed(1184245352) 
+in_train <- createDataPartition(y = crime$ViolentCrimesPerPop,
+                                p = 3 / 4, list = FALSE)
+str(in_train)
+crime_training <- crime[ in_train, ]
+crime_testing  <- crime[-in_train, ]
+```
+
+## lm
+```{r}
+fit <- train(ViolentCrimesPerPop ~ state + medFamInc + NumUnderPov + NumIlleg, data = crime_training, method = "lm", preProcess = c("center", "scale"))
+y_hat <- predict(fit, newdata = crime_testing)
+defaultSummary(data.frame(obs = crime_testing$ViolentCrimesPerPop, pred = y_hat))
+MSE <- 0.1399899^2
+MSE
+```
+## plsr
+```{r}
+fit1 <- train(ViolentCrimesPerPop ~ state + medFamInc + NumUnderPov + NumIlleg, data = crime_training, method = "pls", preProcess = c("center", "scale"))
+y_hat1 <- predict(fit1, newdata = crime_testing)
+defaultSummary(data.frame(obs = crime_testing$ViolentCrimesPerPop, pred = y_hat1))
+MSE1 <- 0.1549313^2
+MSE1
+```
+
+From the results above we can see, the lm produces the lowest mean squared error.
+
+# Classification of Binary Outcomes
+
+```{r}
+loans <- readRDS("loans.rds")
+str(loans, max.level = 1)
+```
+
+## Split the dataset into training and testing.
+```{r}
+loans$y <- factor(loans$y, labels = c("yes", "no"), levels = 1:0)
+set.seed(12345)
+in_train1 <- createDataPartition(y = loans$y, p = 3 / 4, list = FALSE)
+loan_training <- loans[ in_train1, ]
+loan_testing  <- loans[-in_train1, ]
+```
+
+## glm
+```{r}
+logit <- glm(y ~ Debt.To.Income.Ratio + Amount.Requested + Employment.Length, data = loan_training, family = binomial(link = "logit"))
+y_hat_logit <- predict(logit, newdata = loan_testing, type = "response") 
+z_logit <- factor(y_hat_logit > 0.5, levels = c(TRUE, FALSE), labels = c("yes", "no")) 
+confusionMatrix(z_logit, reference = loan_testing$y)
+```
+
+
+## glmnet
+```{r}
+ctrl <- trainControl(method = "cv", number = 10)
+tune_grid <- expand.grid(.alpha = seq(0, 1, length.out = 10),
+                         .lambda = seq(0, 1, length.out = 10))
+penalized_logit <- train(y ~ Debt.To.Income.Ratio + Amount.Requested + Employment.Length, data = loan_training, method = "glmnet", trControl = ctrl, tuneGrid = tune_grid, preProcess = c("center", "scale"))
+y_hat_penalized_logit <- predict(penalized_logit, newdata = loan_testing, type = "prob")$yes
+# above are probabilities, below are classifications
+z <- predict(penalized_logit, newdata = loan_testing) 
+defaultSummary(data.frame(obs = loan_testing$y, pred = z))
+confusionMatrix(z, reference = loan_testing$y)
+```
+From the results above, we can find that Accuracy of glmnet is more than that of glm, so glmnet performs best.

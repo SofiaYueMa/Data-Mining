@@ -1,0 +1,156 @@
+---
+title: "Assignment_4_Yue_Ma"
+author: "Yue Ma"
+date: "12/03/2018"
+output:
+  html_document:
+    number_sections: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Smooth Nonlinear Models for a Continuous Outcome
+```{r}
+data(College, package = "ISLR")
+str(College, max.level = 1)
+```
+
+(a) Use the createDataParition function to split the observations into training and testing.
+```{r}
+library(caret)
+set.seed(1796990821) 
+in_train <- createDataPartition(y = College$Outstate,
+                                p = 3 / 4, list = FALSE)
+str(in_train)
+college_training <- College[ in_train, ]
+college_testing  <- College[-in_train, ]
+```
+
+(b) Use the lm() function to predict Outstate using whatever transformations, polynomials, cuts, and interactions you feel are necessary to predict well in the testing data.
+
+```{r}
+fit1 <- train(Outstate ~ Expend, data = college_training, method = "lm", preProcess = c("center", "scale"))
+y_hat1 <- predict(fit1, newdata = college_testing)
+defaultSummary(data.frame(obs = college_testing$Outstate, pred = y_hat1))
+MSE1 <- 2728.8727270^2
+MSE1
+```
+
+```{r}
+fit2 <- train(Outstate ~ Expend + S.F.Ratio, data = college_training, method = "lm", preProcess = c("center", "scale"))
+y_hat2 <- predict(fit2, newdata = college_testing)
+defaultSummary(data.frame(obs = college_testing$Outstate, pred = y_hat2))
+MSE2 <- 2649.1714928^2
+MSE2
+```
+
+From the results above we can see, the last lm model produces the lowest mean squared error. 
+
+(c) Use caret to fit a Generalized Additive Model where Outstate is the outcome using the predictors from your best model for the training data in part (b). Explain what calling plot() on the finalModel list element tells you.
+```{r}
+library(gam)
+ctrl <- trainControl("cv", number = 10)
+GAM_grid <- data.frame(df = 1:10)
+GAM <- train(Outstate ~ S.F.Ratio + Expend, data = college_training, method = "gamSpline", trControl = ctrl, tuneGrid = GAM_grid, preProcess = c("center", "scale"))
+plot(GAM$finalModel)
+```
+
+From the plot, we can see that when Student/faculty ratio is equal to about 2, the Out-of-state tuition is the least. When the raito is less or more than 2, the Out-of-state tuition will increase.
+When the Instructional expenditure per student is less than 4, the Out-of-state tuition is in positive realtionship with the expend, while when expend is more than four, the Out-of-state tuition will remain constant on 8000.
+
+
+(d) Which predictors, if any, exhibit a very non-linear relationship with Outstate, conditional on the other predictors?
+
+Yes, both the Instructional expenditure per student (Expend) and Student/faculty ratio (S.F.Ratio) exhibit a non-linear relationship with Outstate.
+
+
+(e) Is the average squared error in the testing data greater, less than, or about the same than with lm?
+```{r}
+defaultSummary(data.frame(obs = college_testing$Outstate, pred = predict(GAM, newdata = college_testing)))
+MSE3 <- 2184.6078873^2
+MSE3
+```
+For the lm model, the MSE is 7018110, and the MSE in the testing data with GAM is 4772512, much less than that in lm model.
+
+# Fused Lasso Additive Model
+
+(a) In your own words, describe what the Fused Lasso Additive Model does
+
+The fused lasso additive model is an approach to fit an additive model in which each component is estimated to be piecewise constant with a small number of adaptively-chosen knots.
+
+It is the solution to a convex optimization problem, for which a simple algorithm with guaranteed convergence to a global optimum is provided. Also, it is shown to be consistent in high dimensions, and an unbiased estimator of its degrees of freedom is proposed.
+
+
+(b) Use the flamCV function in the flam package to find the optimal values of the tuning parameters and estimate the coefficients of a model with the same predictors as in problem 1. Does the Fused Lasso Additive Model predict better in the testing data than the Generalized Additive Model?
+```{r}
+library(flam)
+set.seed(1796990821) 
+flam.out <- flam(x = college_training$S.F.Ratio, y = college_training$Expend, alpha.seq = c(0.8, 0.9, 1))
+flamCV.out <- flamCV(x = college_training$S.F.Ratio, y = college_training$Expend, alpha = 1, n.fold = 2)
+
+alpha <- flamCV.out$alpha 
+lambda <- flamCV.out$lambda.cv
+new.x <- college_testing$S.F.Ratio + college_testing$Expend
+y_hat3 <- predict(flamCV.out$flam.out, new.x = new.x, lambda = lambda, alpha = alpha)
+
+defaultSummary(data.frame(obs = college_testing$Outstate, pred = y_hat3))
+```
+The RMSE of FLAM is more than that of GAM, so the MSE of FLAM is more than that of GAM as well.
+In this case, the FLAM does not predict better in the testing data than the GAM.
+
+# Tree-Based Models for a Binary Outcome
+```{r}
+payback <- readRDS("payback.rds")
+```
+
+(a) Use the createDataParition function to split the observations into training and testing.
+```{r}
+set.seed(1796990821) 
+in_train1 <- createDataPartition(y = payback$y,
+                                p = 3 / 4, list = FALSE)
+str(in_train)
+loan_training <- payback[ in_train1, ]
+loan_testing  <- payback[-in_train1, ]
+```
+
+(b) Fit a logit model to the outcome in the training data, using whatever transformations, polynomials, cuts, and interactions you feel are necessary to predict well in the testing data.
+```{r}
+logit <- glm(y ~ int_rate + term + loan_amnt + annual_inc, data = loan_training, family = binomial(link = "logit"))
+y_hat_logit <- predict(logit, newdata = loan_testing, type = "response") 
+defaultSummary(data.frame(obs = loan_testing$y, pred = y_hat_logit))
+MSE4 <- 0.34638198^2
+MSE4
+```
+
+(c) Use a boosting and then a single-tree approach to fit the outcome in the training data.
+
+Boosting approach.
+```{r}
+library(gbm)
+gbm_loan <- gbm(y ~ int_rate + term + loan_amnt + annual_inc, data = loan_training, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4)
+y_hat4 <- predict(gbm_loan, newdata = loan_testing, n.trees = 5000)
+defaultSummary(data.frame(obs = loan_testing$y, pred = exp(y_hat4)))
+MSE5 <- 0.915926350^2
+MSE5
+```
+
+A single-tree approach.
+```{r}
+ctrl <- trainControl(method = "cv", number = 10)
+payback$y <- as.factor(payback$y)
+out2 <- train(y ~ int_rate + term + loan_amnt + annual_inc, data = loan_training, method = "rpart2", tuneLength = 10, trControl = ctrl)
+y_hat5 <- predict(out2, newdata = loan_testing)
+defaultSummary(data.frame(obs = loan_testing$y, pred = y_hat5))
+MSE6 <- 0.35150626^2
+MSE6
+```
+
+
+(d) Rank the three approaches in parts (b) and (c) in terms of which is most likely to yield a correct classification in the testing data.
+
+From the results above, we can see that the MSE of logit model is 0.1199805, the MSE of boosting approach is 0.8389211，the MSE of a single_tree approach is 0.1235567 Thus, the rank of the model from best to worst in this case is logit model, a single-tree approach, and boosting approach. The logit model is most likely to yield a correct classification in the testing data.
+
+

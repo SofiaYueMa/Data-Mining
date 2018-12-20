@@ -1,0 +1,428 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Assignment\_3\_Yue\_Ma},
+            pdfauthor={Yue Ma},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Assignment\_3\_Yue\_Ma}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Yue Ma}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{11/14/2018}
+
+
+\begin{document}
+\maketitle
+
+\section{Prediction with Linear Models - crime
+dataset.}\label{prediction-with-linear-models---crime-dataset.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ROOT <-}\StringTok{ "https://archive.ics.uci.edu/ml/machine-learning-databases/"}
+\NormalTok{crime <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(ROOT, }\StringTok{"communities/communities.data"}\NormalTok{),}
+\DataTypeTok{header =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{na.strings =} \StringTok{"?"}\NormalTok{)}
+\NormalTok{crime <-}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(crime)}
+\KeywordTok{colnames}\NormalTok{(crime) <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(ROOT, }\StringTok{"communities/communities.names"}\NormalTok{),}
+\DataTypeTok{skip =} \DecValTok{75}\NormalTok{, }\DataTypeTok{nrows =} \KeywordTok{ncol}\NormalTok{(crime))[,}\DecValTok{2}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Split the dataset into training and
+testing.}\label{split-the-dataset-into-training-and-testing.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(caret)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: ggplot2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1184245352}\NormalTok{) }
+\NormalTok{in_train <-}\StringTok{ }\KeywordTok{createDataPartition}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ crime}\OperatorTok{$}\NormalTok{ViolentCrimesPerPop,}
+                                \DataTypeTok{p =} \DecValTok{3} \OperatorTok{/}\StringTok{ }\DecValTok{4}\NormalTok{, }\DataTypeTok{list =} \OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{str}\NormalTok{(in_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  int [1:94, 1] 1 2 3 5 9 10 12 13 14 15 ...
+##  - attr(*, "dimnames")=List of 2
+##   ..$ : NULL
+##   ..$ : chr "Resample1"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{crime_training <-}\StringTok{ }\NormalTok{crime[ in_train, ]}
+\NormalTok{crime_testing  <-}\StringTok{ }\NormalTok{crime[}\OperatorTok{-}\NormalTok{in_train, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Solve an optimization problem using the pre-processed
+training
+data.}\label{solve-an-optimization-problem-using-the-pre-processed-training-data.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{train}\NormalTok{(ViolentCrimesPerPop }\OperatorTok{~}\StringTok{ }\NormalTok{state }\OperatorTok{+}\StringTok{ }\NormalTok{medFamInc }\OperatorTok{+}\StringTok{ }\NormalTok{NumUnderPov }\OperatorTok{+}\StringTok{ }\NormalTok{NumIlleg, }\DataTypeTok{data =}\NormalTok{ crime_training, }\DataTypeTok{method =} \StringTok{"lm"}\NormalTok{, }\DataTypeTok{preProcess =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Predict in the testing
+data.}\label{predict-in-the-testing-data.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(fit, }\DataTypeTok{newdata =}\NormalTok{ crime_testing)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Calculation and
+Evaluation.}\label{calculation-and-evaluation.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{defaultSummary}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{obs =}\NormalTok{ crime_testing}\OperatorTok{$}\NormalTok{ViolentCrimesPerPop, }\DataTypeTok{pred =}\NormalTok{ y_hat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      RMSE  Rsquared       MAE 
+## 0.1399899 0.7216263 0.1110234
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MSE <-}\StringTok{ }\FloatTok{0.1399899}\OperatorTok{^}\DecValTok{2}
+\NormalTok{MSE}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01959717
+\end{verbatim}
+
+\subsection{Solve an optimization problem using the pre-processed
+training
+data.}\label{solve-an-optimization-problem-using-the-pre-processed-training-data.-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit1 <-}\StringTok{ }\KeywordTok{train}\NormalTok{(ViolentCrimesPerPop }\OperatorTok{~}\StringTok{ }\NormalTok{state }\OperatorTok{+}\StringTok{ }\NormalTok{medFamInc }\OperatorTok{+}\StringTok{ }\NormalTok{NumUnderPov }\OperatorTok{+}\StringTok{ }\NormalTok{NumIlleg, }\DataTypeTok{data =}\NormalTok{ crime_training, }\DataTypeTok{method =} \StringTok{"pls"}\NormalTok{, }\DataTypeTok{preProcess =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Predict in the testing
+data.}\label{predict-in-the-testing-data.-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat1 <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(fit1, }\DataTypeTok{newdata =}\NormalTok{ crime_testing)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Calculation and
+Evaluation.}\label{calculation-and-evaluation.-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{defaultSummary}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{obs =}\NormalTok{ crime_testing}\OperatorTok{$}\NormalTok{ViolentCrimesPerPop, }\DataTypeTok{pred =}\NormalTok{ y_hat1))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      RMSE  Rsquared       MAE 
+## 0.1549313 0.6630449 0.1285896
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MSE1 <-}\StringTok{ }\FloatTok{0.1593378}\OperatorTok{^}\DecValTok{2}
+\NormalTok{MSE1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.02538853
+\end{verbatim}
+
+From the results above we can see, the plsr produces the lowest mean
+squared error.
+
+\section{Classification of Binary
+Outcomes}\label{classification-of-binary-outcomes}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loans <-}\StringTok{ }\KeywordTok{readRDS}\NormalTok{(}\StringTok{"loans.rds"}\NormalTok{)}
+\KeywordTok{str}\NormalTok{(loans, }\DataTypeTok{max.level =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    25000 obs. of  6 variables:
+##  $ Amount.Requested    : num  3000 26775 5000 30000 1000 ...
+##  $ Debt.To.Income.Ratio: num  0 38.8 15.3 7.9 17.6 ...
+##  $ Zip.Code            : chr  "754" "331" "330" "750" ...
+##  $ State               : chr  "TX" "FL" "FL" "TX" ...
+##  $ Employment.Length   : num  0 5 0 6 0 0 0 0 0 2 ...
+##  $ y                   : int  0 0 0 1 0 0 0 1 0 1 ...
+\end{verbatim}
+
+\subsection{Split the dataset into training and
+testing.}\label{split-the-dataset-into-training-and-testing.-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loans}\OperatorTok{$}\NormalTok{y <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(loans}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"yes"}\NormalTok{, }\StringTok{"no"}\NormalTok{), }\DataTypeTok{levels =} \DecValTok{1}\OperatorTok{:}\DecValTok{0}\NormalTok{)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{12345}\NormalTok{)}
+\NormalTok{in_train1 <-}\StringTok{ }\KeywordTok{createDataPartition}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ loans}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{p =} \DecValTok{3} \OperatorTok{/}\StringTok{ }\DecValTok{4}\NormalTok{, }\DataTypeTok{list =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{loan_training <-}\StringTok{ }\NormalTok{loans[ in_train1, ]}
+\NormalTok{loan_testing  <-}\StringTok{ }\NormalTok{loans[}\OperatorTok{-}\NormalTok{in_train1, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{glm}\label{glm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{logit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{Debt.To.Income.Ratio }\OperatorTok{+}\StringTok{ }\NormalTok{Amount.Requested }\OperatorTok{+}\StringTok{ }\NormalTok{Employment.Length, }\DataTypeTok{data =}\NormalTok{ loan_training, }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat_logit <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(logit, }\DataTypeTok{newdata =}\NormalTok{ loan_testing, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{) }
+\NormalTok{z_logit <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(y_hat_logit }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{, }\DataTypeTok{levels =} \KeywordTok{c}\NormalTok{(}\OtherTok{TRUE}\NormalTok{, }\OtherTok{FALSE}\NormalTok{), }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"yes"}\NormalTok{, }\StringTok{"no"}\NormalTok{)) }
+\KeywordTok{table}\NormalTok{(z_logit, loan_testing}\OperatorTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        
+## z_logit  yes   no
+##     yes  341 5538
+##     no   203  167
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Sensitivity <-}\StringTok{ }\DecValTok{341} \OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{341} \OperatorTok{+}\StringTok{ }\DecValTok{203}\NormalTok{)}
+\KeywordTok{paste}\NormalTok{(}\StringTok{"Sensitivity="}\NormalTok{, Sensitivity)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Sensitivity= 0.626838235294118"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Specificity <-}\StringTok{ }\DecValTok{167} \OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{167} \OperatorTok{+}\StringTok{ }\DecValTok{5538}\NormalTok{)}
+\KeywordTok{paste}\NormalTok{(}\StringTok{"Specificity="}\NormalTok{, Specificity)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Specificity= 0.0292725679228747"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Prevalance <-}\StringTok{ }\NormalTok{(}\DecValTok{341} \OperatorTok{+}\StringTok{ }\DecValTok{203}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{341} \OperatorTok{+}\StringTok{ }\DecValTok{203} \OperatorTok{+}\StringTok{ }\DecValTok{5538} \OperatorTok{+}\StringTok{ }\DecValTok{167}\NormalTok{)}
+\KeywordTok{paste}\NormalTok{(}\StringTok{"Prevalance="}\NormalTok{, Prevalance)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Prevalance= 0.0870539286285806"
+\end{verbatim}
+
+The sensitivity = (341/(341 + 203))
+
+\subsection{glmnet}\label{glmnet}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ctrl <-}\StringTok{ }\KeywordTok{trainControl}\NormalTok{(}\DataTypeTok{method =} \StringTok{"repeatedcv"}\NormalTok{, }\DataTypeTok{repeats =} \DecValTok{3}\NormalTok{, }
+                     \DataTypeTok{classProbs =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{summaryFunction =}\NormalTok{ twoClassSummary)}
+\NormalTok{tune_grid <-}\StringTok{ }\KeywordTok{expand.grid}\NormalTok{(}\DataTypeTok{.alpha =} \KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{10}\NormalTok{),}
+                         \DataTypeTok{.lambda =} \KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{10}\NormalTok{))}
+\NormalTok{penalized_logit <-}\StringTok{ }\KeywordTok{train}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{Debt.To.Income.Ratio }\OperatorTok{+}\StringTok{ }\NormalTok{Amount.Requested }\OperatorTok{+}\StringTok{ }\NormalTok{Employment.Length, }\DataTypeTok{data =}\NormalTok{ loan_training, }\DataTypeTok{method =} \StringTok{"glmnet"}\NormalTok{, }\DataTypeTok{trControl =}\NormalTok{ ctrl, }\DataTypeTok{metric =} \StringTok{"ROC"}\NormalTok{, }\DataTypeTok{tuneGrid =}\NormalTok{ tune_grid, }\DataTypeTok{preProcess =} \KeywordTok{c}\NormalTok{(}\StringTok{"center"}\NormalTok{, }\StringTok{"scale"}\NormalTok{))}
+\NormalTok{y_hat_penalized_logit <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(penalized_logit, }\DataTypeTok{newdata =}\NormalTok{ loan_testing, }\DataTypeTok{type =} \StringTok{"prob"}\NormalTok{)}\OperatorTok{$}\NormalTok{yes}
+\CommentTok{# above are probabilities, below are classifications}
+\NormalTok{z <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(penalized_logit, }\DataTypeTok{newdata =}\NormalTok{ loan_testing) }
+\KeywordTok{defaultSummary}\NormalTok{(}\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{obs =}\NormalTok{ loan_testing}\OperatorTok{$}\NormalTok{y, }\DataTypeTok{pred =}\NormalTok{ z))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Accuracy     Kappa 
+## 0.9179069 0.3955847
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{confusionMatrix}\NormalTok{(z, }\DataTypeTok{reference =}\NormalTok{ loan_testing}\OperatorTok{$}\NormalTok{y)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  yes   no
+##        yes  200  169
+##        no   344 5536
+##                                           
+##                Accuracy : 0.9179          
+##                  95% CI : (0.9108, 0.9246)
+##     No Information Rate : 0.9129          
+##     P-Value [Acc > NIR] : 0.08469         
+##                                           
+##                   Kappa : 0.3956          
+##  Mcnemar's Test P-Value : 1.563e-14       
+##                                           
+##             Sensitivity : 0.36765         
+##             Specificity : 0.97038         
+##          Pos Pred Value : 0.54201         
+##          Neg Pred Value : 0.94150         
+##              Prevalence : 0.08705         
+##          Detection Rate : 0.03201         
+##    Detection Prevalence : 0.05905         
+##       Balanced Accuracy : 0.66901         
+##                                           
+##        'Positive' Class : yes             
+## 
+\end{verbatim}
+
+
+\end{document}
